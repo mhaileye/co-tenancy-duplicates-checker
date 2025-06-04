@@ -97,47 +97,45 @@ End Sub
 Sub comparison(c_row As Long, answer_cols() As Long)
     ' The first_item_row would serve as the rows for the data headers
 
-    Dim grouped_answer() As Long
+    Dim groupd_cols() As Long
     Dim i As Long
+    Dim j As Long
     Dim count As Long
     count = 1
         
     For i = LBound(answer_cols) To UBound(answer_cols)
         c_col = answer_cols(i).Value
         
-        If InStr(1, c_col, "Answer" & " " & count) = 1 Then
-            ReDim Preserve answer_cols(1 To count)
-            grouped_answer(count) = c_col
+        If InStr(1, c_col, ("Answer" & " " & count)) = 1 Then
+            ReDim Preserve groupd_cols(1 To i)
+            groupd_cols(i) = c_col
         Else
             count = count + 1
-            
+            For j = LBound(groupd_cols) To UBound(groupd_cols)
+                g_col = groupd_cols(j).Value
+                ReDim Preserve grouped_answer(1 To j, 1 To j)
+
+                grouped_answer(1, j) = Cells(c_row - 1, g_col)
+                grouped_answer(1, j) = Cells(c_row - 1, g_col)
+            Next j
+
+            last_index = UBound(grouped_cols) - 1
+            ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row - 1, group_cols(1)), cells(c_row - 1, group_cols(last_index))),
+                SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
+            ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row, group_cols(1)), cells(c_row, group_cols(last_index))),
+                SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
+
             If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 1 Then
                 Cells(c_row, last_col + 4) = "Unique"
-                
-                Exit For
+
                 
             End If
-            
+
         End If
         
-    Next
+    Next i
 
 End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
