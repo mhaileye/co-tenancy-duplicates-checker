@@ -45,11 +45,12 @@ Sub test2()
     Cells(store_num_row, last_col + 4).Value = "Identifier"
     
     Dim i As Long
-    Dim j As Long
+    Dim j As String
     
     For i = store_num_row + 1 To last_row
-        j = Left(Cells(i, store_num_col), 5)
-        j = Right("00000" & j, 5)
+        j = CStr(Left(Cells(i, store_num_col), 5))
+        j = "00000" & j
+        j = Right(j, 5)
         Cells(i, last_col + 2).NumberFormat = "@"
         Cells(i, last_col + 2).Value = j
     Next i
