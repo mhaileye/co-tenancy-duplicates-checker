@@ -49,6 +49,8 @@ Sub test2()
     
     For i = store_num_row + 1 To last_row
         j = Left(Cells(i, store_num_col), 5)
+        j = Right("00000" & j, 5)
+        Cells(i, last_col + 2).NumberFormat = "@"
         Cells(i, last_col + 2).Value = j
     Next i
     
