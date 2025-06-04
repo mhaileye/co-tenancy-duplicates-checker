@@ -72,12 +72,7 @@ Sub test2()
         End If
     Next col
     
-    For i = LBound(answer_cols) To UBound(answer_cols)
-        MsgBox answer_cols(i)
-
-    Next
-
-
+   
     '
     ' Check if the store num are same if so check else ski p
     '
