@@ -98,9 +98,12 @@ Sub comparison(c_row As Long, answer_cols() As Long)
     ' The first_item_row would serve as the rows for the data headers
 
     Dim groupd_cols() As Long
+    Dim c_col As Long
     Dim i As Long
     Dim j As Long
+    Dim is_done As Boolean
     Dim count As Long
+    is_done = False
     count = 1
         
     For i = LBound(answer_cols) To UBound(answer_cols)
@@ -111,49 +114,37 @@ Sub comparison(c_row As Long, answer_cols() As Long)
             groupd_cols(i) = c_col
         Else
             count = count + 1
-            For j = LBound(groupd_cols) To UBound(groupd_cols)
-                g_col = groupd_cols(j).Value
-                ReDim Preserve grouped_answer(1 To j, 1 To j)
-
-                grouped_answer(1, j) = Cells(c_row - 1, g_col)
-                grouped_answer(1, j) = Cells(c_row - 1, g_col)
-            Next j
-
+    
             last_index = UBound(grouped_cols) - 1
             ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row - 1, group_cols(1)), cells(c_row - 1, group_cols(last_index))),
                 SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
             ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row, group_cols(1)), cells(c_row, group_cols(last_index))),
                 SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
 
-            If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 1 Then
-                Cells(c_row, last_col + 4) = "Unique"
+            For c_col = LBound(groupd_cols) To UBound(groupd_cols)
+                If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 1 Then
+                    Cells(c_row, last_col + 4) = "Unique"
+                    is_done = True
+                End If
 
-                
-            End If
+                If is_done Then
+                    Exit For
+                End If
 
+            Next c_col
+
+        End If
+
+        If is_done Then
+            Exit For
         End If
         
     Next i
 
+    If Not is_done Then
+        Cells(c_row, last_col + 4) = "Duplicated"
+    End If
+
 End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
