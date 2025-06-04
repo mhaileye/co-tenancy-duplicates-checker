@@ -20,16 +20,12 @@ Sub test2()
 
     For c_row = first_item_row To last_row
         For c_col = first_item_col To last_col
-            If store_num_row = -1 And StrComp(Cells(c_row, c_col).Value, "add", vbTextCompare) = 0 Then
+            If store_num_row = -1 And StrComp(Cells(c_row, c_col).Value, "Store Number", vbTextCompare) = 0 Then
                 store_num_row = c_row
                 store_num_col = c_col
                 
                 is_done = True
-                
-            End If
-                            
-            If is_done Then
-                Exit For
+                exit for
             End If
         
         Next c_col
@@ -41,9 +37,10 @@ Sub test2()
     Next c_row
     
     
-    
+    '
     ' Populating the correct store number (first five digits)
-    
+    '
+
     Cells(store_num_row, last_col + 2).Value = "Unique_store_num"
     Cells(store_num_row, last_col + 4).Value = "Identifier"
     
@@ -65,7 +62,7 @@ Sub test2()
     count = 0
     
     For col = first_item_col To last_col
-        If InStr(1, Cells(first_item_row, col), "ad") = 1 Then
+        If InStr(1, Cells(first_item_row, col), "Answer") = 1 Then
             count = count + 1
             ReDim Preserve answer_cols(1 To count)
             answer_cols(count) = col
@@ -77,15 +74,17 @@ Sub test2()
         MsgBox answer_cols(i)
 
     Next
-    
+
+
+    '
     ' Check if the store num are same if so check else ski p
-    
+    '
+
     For c_row = (first_item_row + 2) To last_row
         If Cells(c_row - 1, last_col + 2).Value = Cells(c_row, last_col + 2).Value Then
-            Cells(c_row, last_col + 4) = "dup" ' Do comparison
-            ' comparison c_row, answer_cols()
+            comparison c_row, last_col, answer_cols()
         Else
-            Cells(c_row, last_col + 4) = "uniq" ' Do nothing
+            Cells(c_row, last_col + 4) = "Unique"
         End If
         
     Next c_row
@@ -94,8 +93,10 @@ Sub test2()
 End Sub
 
 
-Sub comparison(c_row As Long, answer_cols() As Long)
+Sub comparison(c_row As Long, last_col As Long, answer_cols() As Long)
+    '
     ' The first_item_row would serve as the rows for the data headers
+    '
 
     Dim groupd_cols() As Long
     Dim c_col As Long
@@ -114,12 +115,16 @@ Sub comparison(c_row As Long, answer_cols() As Long)
             groupd_cols(i) = c_col
         Else
             count = count + 1
+
     
             last_index = UBound(grouped_cols) - 1
-            ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row - 1, group_cols(1)), cells(c_row - 1, group_cols(last_index))),
-                SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
-            ActiveWorkbook.worksheets.sort.sortfields.Add2 Key:= range(cells(c_row, group_cols(1)), cells(c_row, group_cols(last_index))),
-                SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _xlSortNormal
+
+            ActiveSheet.Sort.SortFields.Add2 Key:=Range(cells(c_row - 1, group_cols(1)), cells(c_row - 1, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+                xlSortNormal
+
+            ActiveSheet.Sort.SortFields.Add2 Key:=Range(cells(c_row, group_cols(1)), cells(c_row, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+                xlSortNormal
+
 
             For c_col = LBound(groupd_cols) To UBound(groupd_cols)
                 If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 1 Then
