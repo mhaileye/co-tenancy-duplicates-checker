@@ -25,7 +25,7 @@ Sub test2()
                 store_num_col = c_col
                 
                 is_done = True
-                exit for
+                Exit For
             End If
         
         Next c_col
@@ -45,13 +45,10 @@ Sub test2()
     Cells(store_num_row, last_col + 4).Value = "Identifier"
     
     Dim i As Long
-    Dim j As String
+    Dim j As Long
     
     For i = store_num_row + 1 To last_row
-        j = CStr(Left(Cells(i, store_num_col), 5))
-        j = "00000" & j
-        j = Right(j, 5)
-        Cells(i, last_col + 2).NumberFormat = "@"
+        j = Left(Cells(i, store_num_col), 5)
         Cells(i, last_col + 2).Value = j
     Next i
     
@@ -73,7 +70,12 @@ Sub test2()
         End If
     Next col
     
-   
+    For i = LBound(answer_cols) To UBound(answer_cols)
+        MsgBox answer_cols(i)
+
+    Next
+
+
     '
     ' Check if the store num are same if so check else ski p
     '
@@ -117,10 +119,10 @@ Sub comparison(c_row As Long, last_col As Long, answer_cols() As Long)
     
             last_index = UBound(grouped_cols) - 1
 
-            ActiveSheet.Sort.SortFields.Add2 Key:=Range(cells(c_row - 1, group_cols(1)), cells(c_row - 1, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+            ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row - 1, group_cols(1)), Cells(c_row - 1, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
                 xlSortNormal
 
-            ActiveSheet.Sort.SortFields.Add2 Key:=Range(cells(c_row, group_cols(1)), cells(c_row, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+            ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row, group_cols(1)), Cells(c_row, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
                 xlSortNormal
 
 
@@ -149,5 +151,4 @@ Sub comparison(c_row As Long, last_col As Long, answer_cols() As Long)
     End If
 
 End Sub
-
 
