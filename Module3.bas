@@ -1,7 +1,7 @@
 Attribute VB_Name = "Module3"
 Sub test2()
 
-    Dim c_row As Long, c_col As Long, last_row As Long, last_col As Long
+    Dim c_row As Long, c_col As Long, first_item_row As Long, first_item_col As Long, last_row As Long, last_col As Long
     Dim store_unique_num As String
     Dim is_done As Boolean
     
