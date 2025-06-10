@@ -110,29 +110,31 @@ Sub comparison(c_row As Long, last_col As Long, answer_cols() As Long)
     For i = LBound(answer_cols) To UBound(answer_cols)
         c_col = answer_cols(i).Value
         
-        If InStr(1, c_col, ("Answer" & " " & count)) = 1 Then
+        If InStr(1, Cells(c_row, c_col), ("Answer " & count)) = 1 Or _
+            InStr(1, Cells(c_row, c_col), ("Answer" & count)) = 1 Then
+            
             ReDim Preserve groupd_cols(1 To i)
             groupd_cols(i) = c_col
+        
         Else
             count = count + 1
 
     
             last_index = UBound(grouped_cols) - 1
 
-            ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row - 1, group_cols(1)), Cells(c_row - 1, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+            'ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row - 1, group_cols(1)), Cells(c_row - 1, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
                 xlSortNormal
 
-            ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row, group_cols(1)), Cells(c_row, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+            'ActiveSheet.Sort.SortFields.Add2 Key:=Range(Cells(c_row, group_cols(1)), Cells(c_row, group_cols(last_index))), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
                 xlSortNormal
 
 
             For c_col = LBound(groupd_cols) To UBound(groupd_cols)
-                If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 1 Then
+                If StrComp(Cells(c_row - 1, c_col).Value, Cells(c_row, c_col).Value, vbTextCompare) = 0 Then
+                
+                Else
                     Cells(c_row, last_col + 4) = "Unique"
                     is_done = True
-                End If
-
-                If is_done Then
                     Exit For
                 End If
 
