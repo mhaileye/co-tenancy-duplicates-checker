@@ -1,6 +1,9 @@
 Attribute VB_Name = "Module3"
-Sub test2()
-
+Sub CoTenancyDuplicatesChecker()
+    '
+    ' Co-Tenancy duplicates identifier and checker
+    '
+    
     Dim c_row As Long, c_col As Long, last_row As Long, last_col As Long
     Dim first_item_row As Long, first_item_col As Long
     Dim store_unique_num As String
@@ -94,11 +97,27 @@ Sub test2()
     
 End Sub
 
-
-Sub comparison(first_item_row As Long, c_row As Long, last_col As Long, answer_cols() As Long)
+Sub ValueComparison(first_item_row As Long, c_row As Long, last_col As Long, answer_cols() As Long)
     '
     ' The first_item_row would serve as the rows for the data headers
     '
+    
+    
+    ' Prefill empties with "N/A" for store name columns, this is better for cross-checking
+    Dim store_col As Long
+    last_idx = UBound(answer_cols)
+    
+    For store_col = (answer_cols(last_idx) + 2) To (last_col - 2)
+        If Len(Cells(c_row - 1, store_col)) = 0 Then
+            Cells(c_row - 1, store_col) = "N/A"
+        ElseIf Len(Cells(c_row, store_col)) = 0 Then
+            Cells(c_row, store_col) = "N/A"
+        End If
+    
+    Next store_col
+    
+    
+    
     
     Dim c_col As Long
     Dim i As Long
@@ -125,14 +144,11 @@ Sub comparison(first_item_row As Long, c_row As Long, last_col As Long, answer_c
         Else
             last_answer_idx = i
             count = count + 1
-            
-            last_index = UBound(grouped_cols) - 1
-            
-            
+                       
             For j = LBound(grouped_cols) To UBound(grouped_cols)
                 g_col = grouped_cols(j)
                 If StrComp(Cells(c_row - 1, g_col), Cells(c_row, g_col), vbTextCompare) = 0 Then
-                    
+                    ' Do nothing
                 Else
                     Cells(c_row, last_col + 4) = "Unique"
                     is_done = True
@@ -154,9 +170,23 @@ Sub comparison(first_item_row As Long, c_row As Long, last_col As Long, answer_c
         End If
         
     Next i
-
+    
+    
     If Not is_done Then
-        Cells(c_row, last_col + 4) = "Duplicated"
+        For store_col_num = (answer_cols(last_idx) + 2) To (last_col - 2)
+            If StrComp(Cells(c_row - 1, store_col_num), Cells(c_row, store_col_num), vbTextCompare) = 0 Then
+                ' Do nothing
+            Else
+                Cells(c_row, last_col + 4) = "Unique"
+                is_done = True
+            End If
+        
+        Next first_store_col_num
+    
+        If Not is_done Then
+            Cells(c_row, last_col + 4) = "Duplicated"
+        End If
+        
     End If
 
 End Sub
