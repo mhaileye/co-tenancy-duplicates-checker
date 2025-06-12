@@ -87,7 +87,7 @@ Sub CoTenancyDuplicatesChecker()
     
     For c_row = (first_item_row + 2) To last_row
         If Cells(c_row - 1, last_col + 2).Value = Cells(c_row, last_col + 2).Value Then
-            comparison first_item_row, c_row, last_col, answer_cols()
+            ValueComparison first_item_row, c_row, last_col, answer_cols()
         Else
             Cells(c_row, last_col + 4) = "Unique"
         End If
@@ -119,12 +119,8 @@ Sub ValueComparison(first_item_row As Long, c_row As Long, last_col As Long, ans
     
     
     
-    Dim c_col As Long
-    Dim i As Long
-    Dim j As Long
+    Dim c_col As Long, i As Long, j As Long, count As Long, array_counter As Long
     Dim is_done As Boolean
-    Dim count As Long
-    Dim array_counter As Long
     is_done = False
     count = 1
     array_counter = 1
@@ -173,21 +169,20 @@ Sub ValueComparison(first_item_row As Long, c_row As Long, last_col As Long, ans
     
     
     If Not is_done Then
-        For store_col_num = (answer_cols(last_idx) + 2) To (last_col - 2)
-            If StrComp(Cells(c_row - 1, store_col_num), Cells(c_row, store_col_num), vbTextCompare) = 0 Then
+        For store_col = (answer_cols(last_idx) + 2) To (last_col - 2)
+            If StrComp(Cells(c_row - 1, store_col), Cells(c_row, store_col), vbTextCompare) = 0 Then
                 ' Do nothing
             Else
                 Cells(c_row, last_col + 4) = "Unique"
                 is_done = True
             End If
         
-        Next first_store_col_num
+        Next store_col
     
         If Not is_done Then
-            Cells(c_row, last_col + 4) = "Duplicated"
+            Cells(c_row, last_col + 4) = "Duplicate"
         End If
         
     End If
 
 End Sub
-
