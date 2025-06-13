@@ -1,5 +1,3 @@
-Attribute VB_Name = "Module3"
-
 Sub CoTenancyDuplicatesChecker()
     '
     ' Co-Tenancy duplicates identifier and checker
@@ -120,48 +118,18 @@ Sub ValueComparison(first_item_row As Long, c_row As Long, last_col As Long, ans
     
     
     
-    Dim c_col As Long, i As Long, j As Long, count As Long, array_counter As Long, grouped_cols() As Long
+    Dim c_col As Long, i As Long
     Dim is_done As Boolean
     is_done = False
-    count = 1
-    array_counter = 1
     
     For i = LBound(answer_cols) To UBound(answer_cols)
         c_col = answer_cols(i)
-                                                                                          
-        If InStr(1, Cells(first_item_row, c_col), ("Answer " & count)) = 0 _
-              Or InStr(1, Cells(first_item_row, c_col), ("Answer" & count)) = 0 Then
-              
-            ReDim Preserve grouped_cols(1 To array_counter)
-            grouped_cols(array_counter) = c_col
-            array_counter = array_counter + 1
-            MsgBox "same: " & count & " :: " & c_row & " :: col " & c_col
+          
+        If StrComp(Cells(c_row - 1, c_col), Cells(c_row, c_col), vbTextCompare) = 0 Then
+            ' Do nothing
         Else
-            last_answer_idx = i
-            count = count + 1
-            MsgBox "diff: " & count & " :: " & c_row & " :: col " & c_col
-            For j = LBound(grouped_cols) To UBound(grouped_cols)
-                g_col = grouped_cols(j)
-                MsgBox c_row & " -- " & g_col & " -- " & Cells(c_row - 1, g_col) & " -- " & Cells(c_row, g_col)
-                If StrComp(Cells(c_row - 1, g_col), Cells(c_row, g_col), vbTextCompare) = 0 Then
-                    ' Do nothing
-                Else
-                    Cells(c_row, last_col + 4) = "Unique"
-                    is_done = True
-                End If
-
-                If is_done Then
-                    Exit For
-                End If
-
-            Next j
-            
-            array_counter = 1
-            Erase grouped_cols
-            
-        End If
-
-        If is_done Then
+            Cells(c_row, last_col + 4) = "Unique"
+            is_done = True
             Exit For
         End If
         
